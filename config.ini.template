@@ -1,0 +1,6 @@
+[db]
+name = mailbotdb
+port = 5432
+host = localhost
+user = postgres
+password = 123
