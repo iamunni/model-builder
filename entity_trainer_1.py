@@ -118,40 +118,40 @@ def train(args, db):
         nlp.meta['name'] = 'usecase_{}.model'.format(usecase)
         nlp.to_disk(output_dir)
         # Getting the entity list labels
-        if source == 'csv':
-            entity_obj = pd.read_csv(DATA_PATH + '/usecases_entity.csv')[['name']].values.tolist()
-        else:
-            entity_obj = db.query('select name from usecases_entity where use_case_id=%s' % usecase)
-        # Entity.objects.filter(use_case=usecase).values()
-        entity_label_list = []
-        for e in entity_obj:
-            entity_label_list.append(e[0])
+#         if source == 'csv':
+#             entity_obj = pd.read_csv(DATA_PATH + '/usecases_entity.csv')[['name']].values.tolist()
+#         else:
+#             entity_obj = db.query('select name from usecases_entity where use_case_id=%s' % usecase)
+#         # Entity.objects.filter(use_case=usecase).values()
+#         entity_label_list = []
+#         for e in entity_obj:
+#             entity_label_list.append(e[0])
 
-        e = Evaluate()
-        beam_score = Evaluate.beam_score(nlp, training_set)
-        eval_score = Evaluate.score(nlp, training_set, entity_label_list)
-        if beam_score is not None:
-            model_full_details = e.basic_view(training_set, beam_score, threshold_value)
-            model_summary = model_full_details['summary']
-            model_matrix = model_full_details['matrix']
-            # model_matrix = json.loads(model_matrix)
-            model_efficiency = model_full_details['efficiency']
-            model_accuracy = model_full_details['precision']
-            model_error = model_full_details['recall']
-            model_threshold = threshold_value
-        else:
-            model_summary = None
-            model_matrix = None
-            model_efficiency = 0
-            model_accuracy = 0
-            model_error = 0
-            model_threshold = threshold_value
-        model_name = "Model1"
-        # Add/Update to DB model/create
-        if source == 'db':
-            db_save(db_conn, model_name, usecase, beam_score, eval_score, output_dir, model_summary, model_matrix,
-                    model_efficiency, model_accuracy['percentage'], model_error['percentage'], model_threshold)
-            print("Saved The Model Details!")
+#         e = Evaluate()
+#         beam_score = Evaluate.beam_score(nlp, training_set)
+#         eval_score = Evaluate.score(nlp, training_set, entity_label_list)
+#         if beam_score is not None:
+#             model_full_details = e.basic_view(training_set, beam_score, threshold_value)
+#             model_summary = model_full_details['summary']
+#             model_matrix = model_full_details['matrix']
+#             # model_matrix = json.loads(model_matrix)
+#             model_efficiency = model_full_details['efficiency']
+#             model_accuracy = model_full_details['precision']
+#             model_error = model_full_details['recall']
+#             model_threshold = threshold_value
+#         else:
+#             model_summary = None
+#             model_matrix = None
+#             model_efficiency = 0
+#             model_accuracy = 0
+#             model_error = 0
+#             model_threshold = threshold_value
+#         model_name = "Model1"
+#         # Add/Update to DB model/create
+#         if source == 'db':
+#             db_save(db_conn, model_name, usecase, beam_score, eval_score, output_dir, model_summary, model_matrix,
+#                     model_efficiency, model_accuracy['percentage'], model_error['percentage'], model_threshold)
+#             print("Saved The Model Details!")
 
 
 if __name__ == '__main__':
